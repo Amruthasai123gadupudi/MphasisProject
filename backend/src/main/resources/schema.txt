@@ -1,0 +1,121 @@
+create database realestate_db;
+use realestate_db;
+show tables;
+
+-- 2. User Table
+CREATE TABLE user (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('BUYER', 'SELLER', 'MANAGER', 'ADMIN') NOT NULL,
+    active BOOLEAN DEFAULT TRUE
+);
+
+-- 3. Property Type Table
+CREATE TABLE property_type (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- 4. Property Table
+CREATE TABLE property (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(12, 2) NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    image_url TEXT,
+    approved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    seller_id INT,
+    type_id INT,
+
+    FOREIGN KEY (seller_id) REFERENCES user(id),
+    FOREIGN KEY (type_id) REFERENCES property_type(id)
+);
+
+-- 5. Inquiry Table
+CREATE TABLE inquiry (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    buyer_id INT NOT NULL,
+    property_id INT NOT NULL,
+
+    FOREIGN KEY (buyer_id) REFERENCES user(id),
+    FOREIGN KEY (property_id) REFERENCES property(id)
+);
+
+-- 6. Favorite Table
+CREATE TABLE favorite (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    buyer_id INT NOT NULL,
+    property_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (buyer_id) REFERENCES user(id),
+    FOREIGN KEY (property_id) REFERENCES property(id),
+
+    UNIQUE (buyer_id, property_id)
+);
+
+-- 7. Viewed Property Table
+CREATE TABLE viewed_property (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    buyer_id INT NOT NULL,
+    property_id INT NOT NULL,
+    viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (buyer_id) REFERENCES user(id),
+    FOREIGN KEY (property_id) REFERENCES property(id)
+);
+
+-- 8. Transaction Table
+CREATE TABLE transaction (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    property_id INT NOT NULL,
+    buyer_id INT NOT NULL,
+    seller_id INT NOT NULL,
+    status ENUM('INITIATED', 'IN_PROGRESS', 'COMPLETED') DEFAULT 'INITIATED',
+    closed_at TIMESTAMP NULL,
+
+    FOREIGN KEY (property_id) REFERENCES property(id),
+    FOREIGN KEY (buyer_id) REFERENCES user(id),
+    FOREIGN KEY (seller_id) REFERENCES user(id)
+);
+
+-- 9. Manager Approval Table (Optional)
+CREATE TABLE manager_approval (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    manager_id INT NOT NULL,
+    property_id INT NOT NULL,
+    status ENUM('PENDING', 'APPROVED', 'REJECTED') DEFAULT 'PENDING',
+    reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (manager_id) REFERENCES user(id),
+    FOREIGN KEY (property_id) REFERENCES property(id)
+);
+
+-- 10. Report Table (Optional - for Admin/Manager reports)
+CREATE TABLE report (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    report_type VARCHAR(100),                     -- e.g., 'USER_STATS', 'PROPERTY_STATS'
+    data JSON,                                    -- Flexible report structure
+    generated_by INT NOT NULL,                    -- user.id (Admin/Manager)
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (generated_by) REFERENCES user(id)
+);
+
+-- 11. Seed Data (Optional for testing)
+INSERT INTO property_type (name) VALUES 
+('Apartment'), ('Villa'), ('Independent House'), ('Plot');
+
+INSERT INTO user (name, email, password, role) VALUES 
+('John Buyer', 'buyer@example.com', 'buyer123', 'BUYER'),
+('Sally Seller', 'seller@example.com', 'seller123', 'SELLER'),
+('Mark Manager', 'manager@example.com', 'manager123', 'MANAGER'),
+('Alice Admin', 'admin@example.com', 'admin123', 'ADMIN');
