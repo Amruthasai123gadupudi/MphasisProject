@@ -1,0 +1,64 @@
+<!-- Fullscreen gradient background -->
+<div class="d-flex align-items-center justify-content-center min-vh-100 bg-light position-relative">
+  
+  <!-- Decorative backdrop (optional) -->
+  <div class="position-absolute top-0 bottom-0 start-0 end-0 bg-gradient" 
+       style="background: linear-gradient(135deg, #cdd3f7, #f1f4fb); z-index: -1;"></div>
+
+  <!-- Home Button -->
+  <div class="position-absolute top-0 start-0 m-3">
+    <button class="btn btn-outline-secondary d-flex align-items-center shadow-sm" (click)="goBackHome()">
+      <i class="bi bi-arrow-left me-2"></i> Home
+    </button>
+  </div>
+
+  <!-- Login Card -->
+  <div class="card shadow-lg rounded p-4 bg-white" style="width: 100%; max-width: 400px; z-index: 1;">
+    <div class="text-center mb-3">
+      <img src="https://static.vecteezy.com/system/resources/previews/002/737/799/original/online-registration-illustration-concept-free-vector.jpg" 
+           alt="Login illustration" 
+           class="img-fluid" 
+           style="max-height: 180px;" />
+    </div>
+
+    <h2 class="mb-4 text-center text-primary">
+      <i class="bi bi-box-arrow-in-right me-2"></i> Login to Your Account
+    </h2>
+
+    <form (ngSubmit)="login()" #loginForm="ngForm" novalidate>
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input id="email" type="email" name="email" [(ngModel)]="user.email" #emailModel="ngModel" required email
+               class="form-control" placeholder="Enter your email"
+               [class.is-invalid]="emailModel.invalid && emailModel.touched" />
+        <div *ngIf="emailModel.errors && emailModel.touched" class="invalid-feedback">
+          <div *ngIf="emailModel.errors['required']">Email is required.</div>
+          <div *ngIf="emailModel.errors['email']">Please enter a valid email.</div>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input id="password" type="password" name="password" [(ngModel)]="user.password" #passwordModel="ngModel" 
+               required minlength="6" class="form-control" placeholder="Enter your password"
+               [class.is-invalid]="passwordModel.invalid && passwordModel.touched" />
+        <div *ngIf="passwordModel.errors && passwordModel.touched" class="invalid-feedback">
+          <div *ngIf="passwordModel.errors['required']">Password is required.</div>
+          <div *ngIf="passwordModel.errors['minlength']">Password must be at least 6 characters.</div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary w-100">
+        <i class="bi bi-shield-lock-fill me-1"></i> Login
+      </button>
+    </form>
+
+    <!-- Message -->
+    <p class="text-center mt-3" [ngClass]="isSuccess ? 'text-success' : 'text-danger'">
+      {{ message }}
+    </p>
+  </div>
+</div>
