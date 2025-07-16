@@ -1,0 +1,109 @@
+<!-- Navbar -->
+<!-- Professional Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm sticky-top" style="background-color: #085ddc;">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold fs-20" href="#" style="color: #e1e6eb;">MG Real Estate</a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarButtons"
+      aria-controls="navbarButtons" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+    </button>
+
+    <!-- Right-aligned Buttons -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarButtons">
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-light" (click)="goToLogin()">Login</button>
+        <button class="btn btn-light" (click)="goToRegister()">Sign Up</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+<!-- Hero Section -->
+<section class="py-5" style="background-color: #d1d6db;">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 text-center text-lg-start">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+          Discover Your Dream Property
+        </h1>
+        <p class="lead text-secondary mb-4">
+          Explore, list, and manage real estate properties with ease.
+        </p>
+        <div>
+          <button (click)="goToRegister()" class="btn btn-primary btn-lg me-3">
+            <i class="bi bi-person-plus-fill"></i> Get Started
+          </button>
+          <button (click)="goToLogin()" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </button>
+        </div>
+      </div>
+
+      <div class="col-lg-6 text-center">
+        <img
+          src="../../assets/mlx.webp"
+          alt="Real Estate Illustration"
+          class="img-fluid rounded shadow-sm"
+          style="max-height: 400px; object-fit: fill;"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Carousel Section with Background -->
+<section class="py-4" style="background-color: #d1d6db;">
+  <div id="realEstateCarousel" class="carousel slide shadow rounded" data-bs-ride="carousel" data-bs-interval="3000"
+       style="max-width: 1588px; height: 432px; margin: auto;">
+    
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#realEstateCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#realEstateCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#realEstateCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+
+    <!-- Slides -->
+    <div class="carousel-inner rounded" style="height: 432px;">
+      <div class="carousel-item active" style="height: 100%;">
+        <img src="../../assets/image.webp" class="d-block w-100 h-100" alt="Modern House" style="object-fit: cover;">
+        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+          <h5>Modern Houses</h5>
+          <p>Explore the latest modern architecture designs.</p>
+        </div>
+      </div>
+
+      <div class="carousel-item" style="height: 100%;">
+        <img src="../../assets/image1.jpg" class="d-block w-100 h-100" alt="Luxury Apartment" style="object-fit: cover;">
+        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+          <h5>Luxury Apartments</h5>
+          <p>Comfort and elegance in the heart of the city.</p>
+        </div>
+      </div>
+
+      <div class="carousel-item" style="height: 100%;">
+        <img src="../../assets/image2.webp" class="d-block w-100 h-100" alt="Cozy Cottage" style="object-fit: cover;">
+        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+          <h5>Cozy Cottages</h5>
+          <p>Find peace and tranquility in beautiful cottages.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#realEstateCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#realEstateCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+
