@@ -1,0 +1,55 @@
+<div class="register-bg d-flex align-items-center justify-content-center min-vh-100" style="background-color: #d1d6db; position: relative;">
+  
+  <!-- Back Arrow Button -->
+  <div class="position-absolute top-0 start-0 m-3">
+    <button class="btn btn-light d-flex align-items-center shadow-sm" (click)="goBackHome()">
+      <i class="bi bi-arrow-left me-2"></i> Home
+    </button>
+  </div>
+
+  <!-- Register Form -->
+  <div class="register-form p-4 rounded shadow bg-white" style="width: 100%; max-width: 400px;">
+    <h2 class="mb-4 text-center text-primary">Register Here</h2>
+
+    <form #registerForm="ngForm" (ngSubmit)="register()" novalidate>
+      <div class="mb-3">
+        <input type="text" name="name" [(ngModel)]="user.name" placeholder="Name" required class="form-control" #name="ngModel">
+        <div class="text-danger small" *ngIf="name.invalid && name.touched">Name is required</div>
+      </div>
+
+      <div class="mb-3">
+        <input type="email" name="email" [(ngModel)]="user.email" placeholder="Email" required email class="form-control" #email="ngModel">
+        <div class="text-danger small" *ngIf="email.invalid && email.touched">
+          <div *ngIf="email.errors?.['required']">Email is required</div>
+          <div *ngIf="email.errors?.['email']">Invalid email format</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <input type="password" name="password" [(ngModel)]="user.password" placeholder="Password" required minlength="6" class="form-control" #password="ngModel">
+        <div class="text-danger small" *ngIf="password.invalid && password.touched">
+          <div *ngIf="password.errors?.['required']">Password is required</div>
+          <div *ngIf="password.errors?.['minlength']">Minimum 6 characters required</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <select name="role" [(ngModel)]="user.role" required class="form-select" #role="ngModel">
+          <option value="" disabled selected>Select Role</option>
+          <option value="BUYER">Buyer</option>
+          <option value="SELLER">Seller</option>
+          <option value="MANAGER">Manager</option>
+        </select>
+        <div class="text-danger small" *ngIf="role.invalid && role.touched">Role is required</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">Register</button>
+    </form>
+
+    <p class="text-center mt-3" [ngClass]="isSuccess ? 'text-success' : 'text-danger'">{{ message }}</p>
+
+    <div class="text-center mt-4">
+      <p>Already have an account? <a routerLink="/login" class="text-decoration-none">Login here</a></p>
+    </div>
+  </div>
+</div>
