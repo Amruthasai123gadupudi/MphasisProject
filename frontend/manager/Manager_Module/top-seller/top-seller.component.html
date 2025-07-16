@@ -1,0 +1,36 @@
+<div class="container my-4">
+    <ng-container *ngIf="!showPerformance">
+      <h2 class="mb-3">📊 Seller Dashboard</h2>
+      <button class="btn btn-primary" (click)="togglePerformance()">Show Performance Table</button>
+    </ng-container>
+  
+    <ng-container *ngIf="showPerformance">
+      <button class="btn btn-secondary mb-3" (click)="togglePerformance()">⬅ Back</button>
+  
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+  
+      <div class="table-responsive" *ngIf="sellers.length">
+        <table class="table table-striped table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Seller ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Completed Transactions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let seller of sellers">
+              <td>{{ seller.sellerId }}</td>
+              <td>{{ seller.name }}</td>
+              <td>{{ seller.email }}</td>
+              <td>{{ seller.completedTransactions }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </div>
+  

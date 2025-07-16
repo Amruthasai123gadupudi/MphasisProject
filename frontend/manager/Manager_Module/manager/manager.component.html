@@ -1,0 +1,166 @@
+<!-- Filter Controls -->
+<div class="filter-container container">
+    <label >
+      <input
+        type="checkbox"
+        [checked]="showPending"
+        (click)="toggleFilter('pending')"
+      />
+      <span style=" margin-right: 4px;">Show Pending</span>
+    </label>
+  
+    <label>
+      <input 
+        type="checkbox"
+        [checked]="showApproved"
+        (click)="toggleFilter('approved')"
+      />
+      <span >Show Approved</span>
+    </label>
+  </div>
+  
+  
+  <!-- Property Cards -->
+  <div class="card-grid container" [class.blurred]="editingProperty">
+    <div class="property-card bg-light" *ngFor="let property of properties">
+      <div class="card-body">
+        <!-- <img [src]="property.imageUrl" alt="{{ property.title }}" /> -->
+        <img
+        [src]="property.imageUrl ? 'http://localhost:8082' + property.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image'"
+        class="card-img-top"
+        style="height: 200px; object-fit: cover;"
+        alt="Property Image"
+      />
+        <h3>{{ property.title }}</h3>
+        <p>{{ property.description }}</p>
+        <p><strong>{{ property.price | currency:'INR':'symbol' }}</strong></p>
+        <p>Status: {{ property.approved ? '✅ Approved' : '⏳ Pending' }}</p>
+      </div>
+    
+      <div class="action-buttons" *ngIf="!editingProperty">
+        <button *ngIf="!property.approved" (click)="approve(property.id)" class="btn btn-success">Approve</button>
+        <button (click)="startEdit(property)" class="btn btn-primary">Edit</button>
+        <button (click)="delete(property.id)" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- Edit Popup Overlay -->
+<div class="overlay" *ngIf="editingProperty">
+  <form #editForm="ngForm" class="edit-form" (ngSubmit)="submitEdit(editForm)" novalidate>
+    <h2>Edit Property</h2>
+
+    <!-- Title -->
+    <label>Title</label>
+    <input
+      type="text"
+      name="title"
+      class="form-control"
+      [(ngModel)]="editingProperty.title"
+      #title="ngModel"
+      required
+    />
+    <div *ngIf="title.invalid && title.touched" class="text-danger small">
+      Title is required.
+    </div>
+
+    <!-- Description -->
+    <label>Description</label>
+    <textarea
+      name="description"
+      class="form-control"
+      [(ngModel)]="editingProperty.description"
+      #description="ngModel"
+      required
+    ></textarea>
+    <div *ngIf="description.invalid && description.touched" class="text-danger small">
+      Description is required.
+    </div>
+
+    <!-- Price -->
+    <label>Price</label>
+    <input
+      type="number"
+      name="price"
+      class="form-control"
+      [(ngModel)]="editingProperty.price"
+      #price="ngModel"
+      required
+      min="1000"
+    />
+    <div *ngIf="price.invalid && price.touched" class="text-danger small">
+      <div *ngIf="price.errors?.['required']">Price is required.</div>
+      <div *ngIf="price.errors?.['min']">Minimum price must be at least ₹1,000.</div>
+    </div>
+
+    <!-- Location -->
+    <label>Location</label>
+    <input
+      type="text"
+      name="location"
+      class="form-control"
+      [(ngModel)]="editingProperty.location"
+      #location="ngModel"
+      required
+    />
+    <div *ngIf="location.invalid && location.touched" class="text-danger small">
+      Location is required.
+    </div>
+
+    <!-- Image URL -->
+    <label>Image URL</label>
+    <input
+      type="url"
+      name="imageUrl"
+      class="form-control"
+      [(ngModel)]="editingProperty.imageUrl"
+      #imageUrl="ngModel"
+      pattern="https?://.+"
+    />
+    <div *ngIf="imageUrl.invalid && imageUrl.touched" class="text-danger small">
+      Please enter a valid URL (starting with http or https).
+    </div>
+
+    <!-- Property Type -->
+    <label>Type</label>
+    <select
+      name="type"
+      class="form-select"
+      [(ngModel)]="editingProperty.type.id"
+      #type="ngModel"
+      required
+    >
+      <option *ngFor="let type of propertyTypes" [value]="type.id">{{ type.name }}</option>
+    </select>
+    <div *ngIf="type.invalid && type.touched" class="text-danger small">
+      Please select a property type.
+    </div>
+
+    <!-- Approval Checkbox -->
+    <div class="form-check form-switch mt-3">
+      <input
+        type="checkbox"
+        id="approved"
+        name="approved"
+        class="form-check-input"
+        [(ngModel)]="editingProperty.approved"
+      />
+      <label class="form-check-label" for="approved">
+        {{ editingProperty.approved ? 'Approved ✅' : 'Pending ⏳' }}
+      </label>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-buttons mt-4">
+      <button type="submit" class="btn btn-success me-2" [disabled]="editForm.invalid">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<!-- <router-outlet></router-outlet> -->
+
+  
+  

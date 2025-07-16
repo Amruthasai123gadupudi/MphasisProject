@@ -1,0 +1,86 @@
+<div class="container my-4">
+    <h2 class="mb-4 text-dark">🔍 Transaction Search</h2>
+  
+    <div class="row g-3 align-items-center mb-3">
+      <div class="col-md-4">
+        <select class="form-select" [(ngModel)]="searchType">
+          <option value="all">All Transactions</option>
+          <option value="sellerId">Seller ID</option>
+          <option value="buyerId">Buyer ID</option>
+          <option value="status">Status</option>
+          <option value="name">Search by Name</option>
+        </select>
+      </div>
+  
+      <div class="col-md-5">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="query"
+          placeholder="Enter value..."
+          [disabled]="searchType === 'all'"
+        />
+      </div>
+  
+      <div class="col-md-3">
+        <button class="btn btn-primary w-100" (click)="search()">Search</button>
+      </div>
+    </div>
+  
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Transaction View -->
+    <div class="table-responsive" *ngIf="results.length && searchType !== 'name'">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Transaction ID</th>
+            <th>Buyer</th>
+            <th>Seller</th>
+            <th>Property</th>
+            <th>Status</th>
+            <th>Closed At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of results">
+            <td>{{ tx.id }}</td>
+            <td>{{ tx.buyer?.name }}</td>
+            <td>{{ tx.seller?.name }}</td>
+            <td>{{ tx.property?.title }}</td>
+            <td>{{ tx.status }}</td>
+            <td>{{ tx.closedAt || '—' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- User View -->
+    <div class="table-responsive" *ngIf="results.length && searchType === 'name'">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of results">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <p *ngIf="!errorMessage && results.length === 0 && query" class="text-muted mt-3">
+      No results found.
+    </p>
+  </div>
+  

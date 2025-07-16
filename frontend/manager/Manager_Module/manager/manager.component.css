@@ -1,0 +1,108 @@
+/* Ensures checkboxes wrap nicely on small screens */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Card grid responsiveness */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+/* Individual property card styling */
+.property-card {
+ display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  color: black;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+  height: 100%; 
+}
+
+.property-card:hover {
+  transform: translateY(-4px);
+}
+
+.property-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.property-card h3 {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+/* Action buttons layout */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.action-buttons button {
+  flex: 1 1 auto;
+  min-width: 100px;
+}
+
+/* Responsive popup overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 1rem;
+}
+
+.edit-form {
+  background: #ffffff;
+  color: #000;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Mobile tweaks */
+@media (max-width: 576px) {
+  .filter-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .property-card h3 {
+    font-size: 1rem;
+  }
+
+  .action-buttons button {
+    font-size: 0.9rem;
+    min-width: unset;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .edit-form {
+    padding: 1.25rem;
+  }
+}
+

@@ -1,0 +1,75 @@
+<div class="container p-4">
+  <h2 class="mb-4 text-success">Manager Inquiries</h2>
+
+  <!-- Action Buttons -->
+  <div class="mb-3">
+    <button class="btn btn-dark me-2" (click)="loadInquiries()">Load Inquiries</button>
+    <button class="btn btn-outline-success" (click)="toggleManagerResponses()">Toggle Manager Responses</button>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <!-- Inquiries List -->
+  <ul class="list-group mb-4" *ngIf="inquiries.length && !showManagerResponses">
+    <li
+      *ngFor="let inquiry of inquiries"
+      class="list-group-item d-flex justify-content-between align-items-center flex-column text-start"
+      (click)="select(inquiry)"
+      style="cursor: pointer;"
+    >
+      <div class="w-100">
+        <strong>#{{ inquiry.id }}</strong> — {{ inquiry.message }}
+      </div>
+      <div *ngIf="inquiry.responseMessage" class="text-muted small mt-2 w-100">
+        <i class="bi bi-chat-dots-fill text-success me-1"></i>
+        <strong>Response:</strong> {{ inquiry.responseMessage }}
+      </div>
+      <div class="text-end w-100">
+        <span class="badge bg-secondary">{{ inquiry.createdAt | date: 'short' }}</span>
+      </div>
+    </li>
+  </ul>
+
+  <!-- Manager Response Panel -->
+  <div *ngIf="showManagerResponses" class="card p-3 mb-4 bg-light">
+    <h4>All Manager Responses</h4>
+    <div *ngIf="managerResponses.length === 0">
+      <p>No responses found for this manager.</p>
+    </div>
+    <ul *ngIf="managerResponses.length > 0" class="list-group">
+      <li *ngFor="let inq of managerResponses" class="list-group-item">
+        <strong>Inquiry #{{ inq.id }}:</strong><br />
+        <pre>{{ inq.responseMessage }}</pre>
+        <div *ngIf="inq.scheduleDate">
+          <small>Scheduled on: {{ inq.scheduleDate | date:'medium' }}</small>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Response Form -->
+  <div *ngIf="selectedInquiry" class="card p-4 shadow-sm">
+    <h4 class="mb-3">Reply to Inquiry #{{ selectedInquiry.id }}</h4>
+    <p><strong>Buyer:</strong> {{ selectedInquiry.buyer?.name || 'N/A' }}</p>
+    <div *ngIf="selectedInquiry.responseMessage" class="alert alert-info">
+      <strong>Previous Response:</strong> {{ selectedInquiry.responseMessage }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Response Message</label>
+      <textarea rows="4" class="form-control" [(ngModel)]="responseText" placeholder="Enter your reply..."></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Schedule Date (optional)</label>
+      <input type="datetime-local" class="form-control" [(ngModel)]="scheduleDateInput" />
+    </div>
+
+    <button
+      class="btn btn-success"
+      (click)="respondToInquiry(selectedInquiry.id, responseText, scheduleDateInput)">
+      <i class="bi bi-send-fill"></i> Submit Reply
+    </button>
+  </div>
+</div>

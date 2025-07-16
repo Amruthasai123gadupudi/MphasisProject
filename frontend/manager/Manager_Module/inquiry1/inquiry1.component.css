@@ -1,0 +1,62 @@
+/* Container padding for all screen sizes */
+.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Make Manager ID input adapt */
+  input[type="number"].form-control.w-25 {
+    width: 100% !important;
+    max-width: 250px;
+  }
+  
+  /* Responsive spacing for button rows */
+  .mb-3 button {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Inquiry List Cards */
+  .list-group-item {
+    word-wrap: break-word;
+    word-break: break-word;
+    padding: 1rem;
+  }
+  
+  /* Badge aligns on small screens */
+  .list-group-item .text-end {
+    text-align: right;
+  }
+  
+  @media (max-width: 576px) {
+    .text-end {
+      text-align: left !important;
+      margin-top: 0.5rem;
+    }
+  
+    .btn {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  
+    .form-control,
+    .form-label,
+    textarea,
+    input,
+    select {
+      font-size: 1rem;
+    }
+  
+    .card.p-4 {
+      padding: 1.25rem;
+    }
+  
+    .shadow-sm {
+      box-shadow: none;
+    }
+  
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+  

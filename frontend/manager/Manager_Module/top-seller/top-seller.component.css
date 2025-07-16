@@ -1,0 +1,73 @@
+/* Container padding */
+.top-seller-container {
+    padding: 1rem;
+  }
+  
+  /* Headings and buttons */
+  .top-seller-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .top-seller-container button {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+  
+  /* Seller Table Styling */
+  .seller-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    color: #000;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .seller-table th,
+  .seller-table td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .seller-table thead {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+  
+  /* Responsive table on mobile */
+  @media (max-width: 576px) {
+    .seller-table thead {
+      display: none;
+    }
+  
+    .seller-table, .seller-table tbody, .seller-table tr, .seller-table td {
+      display: block;
+      width: 100%;
+    }
+  
+    .seller-table tr {
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 0.5rem;
+      background-color: #fff;
+    }
+  
+    .seller-table td {
+      text-align: left;
+      padding: 0.5rem;
+      position: relative;
+    }
+  
+    .seller-table td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #6c757d;
+    }
+  }
+  
