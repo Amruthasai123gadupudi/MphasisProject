@@ -1,0 +1,45 @@
+<form #inquiryForm="ngForm" (ngSubmit)="submitInquiry()" class="mt-2" novalidate>
+  <!-- 📝 Message Field -->
+  <div class="mb-2">
+    <label class="form-label">Message:</label>
+    <textarea
+      [(ngModel)]="message"
+      name="message"
+      class="form-control"
+      rows="3"
+      required
+      #messageRef="ngModel"
+    ></textarea>
+    <div *ngIf="messageRef.invalid && messageRef.touched" class="text-danger small">
+      Message is required.
+    </div>
+  </div>
+
+  <!-- 👤 Target Role Select -->
+  <div class="mb-2">
+    <label class="form-label">To:</label>
+    <select
+      [(ngModel)]="targetRole"
+      name="targetRole"
+      class="form-select"
+      required
+      #roleRef="ngModel"
+    >
+      <option value="" disabled selected>Select a recipient</option>
+      <option value="SELLER">Seller</option>
+      <option value="MANAGER">Manager</option>
+    </select>
+    <div *ngIf="roleRef.invalid && roleRef.touched" class="text-danger small">
+      Please select Seller or Manager.
+    </div>
+  </div>
+
+  <!-- 📩 Submit Button -->
+  <button
+    type="submit"
+    class="btn btn-outline-primary w-100"
+    [disabled]="inquiryForm.invalid"
+  >
+    📨 Send Inquiry
+  </button>
+</form>

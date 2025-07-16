@@ -1,0 +1,140 @@
+<div class="container my-4 reports">
+  <h3 class=" mb-2">Reports & Analytics</h3>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-pills mb-4 shadow-sm" style="background-color: gray; border-radius: 0.5rem;">
+    <li class="nav-item">
+      <button
+        class="nav-link fw-semibold text-white"
+        [class.active]="activeSection === 'userRole'"
+        (click)="activeSection = 'userRole'"
+        [ngStyle]="activeSection === 'userRole' ? {'background-color': '#343a40', 'border': '1px solid #fff'} : {}"
+      >
+        User Roles
+      </button>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link fw-semibold text-white"
+        [class.active]="activeSection === 'propertyApproval'"
+        (click)="activeSection = 'propertyApproval'"
+        [ngStyle]="activeSection === 'propertyApproval' ? {'background-color': '#343a40', 'border': '1px solid #fff'} : {}">
+        Property Approvals
+      </button>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link fw-semibold text-white"
+        [class.active]="activeSection === 'transactionStatus'"
+        (click)="activeSection = 'transactionStatus'"
+        [ngStyle]="activeSection === 'transactionStatus' ? {'background-color': '#343a40', 'border': '1px solid #fff'} : {}"
+      >
+        Transaction Status
+      </button>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link fw-semibold text-white"
+        [class.active]="activeSection === 'platformPerformance'"
+        (click)="activeSection = 'platformPerformance'"
+        [ngStyle]="activeSection === 'platformPerformance' ? {'background-color': '#343a40', 'border': '1px solid #fff'} : {}"
+      >
+        Platform Performance
+      </button>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link fw-semibold text-white"
+        [class.active]="activeSection === 'salesPerformance'"
+        (click)="activeSection = 'salesPerformance'"
+        [ngStyle]="activeSection === 'salesPerformance' ? {'background-color': '#343a40', 'border': '1px solid #fff'} : {}"
+      >
+        Sales Performance
+      </button>
+    </li>
+  </ul>
+  
+    <!-- Section: User Role Report -->
+    <section *ngIf="activeSection === 'userRole'" class="mb-5">
+      <div class="card shadow-sm border-0" style="background-color: #f9fbfc;">
+        <div class="card-header bg-secoundary text-black fw-bold" style="font-size: 1.25rem;">
+          User Role Report
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-transparent" *ngFor="let row of userRoleReport" style="font-size: 1.1rem;">
+              <span class="text-secoundary">{{ row.role }}</span>: {{ row.count }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Section: Property Approval Report -->
+    <section *ngIf="activeSection === 'propertyApproval'" class="mb-5">
+      <div class="card shadow-sm border-0" style="background-color: #f9fbfc;">
+        <div class="card-header bg-secoundary text-black fw-bold" style="font-size: 1.25rem;">
+          Property Approval Report
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-transparent" *ngFor="let row of propertyApprovalReport" style="font-size: 1.1rem;">
+              <span class="text-secoundary">{{ row.approved }}</span>: {{ row.count }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Section: Transaction Status Report -->
+    <section *ngIf="activeSection === 'transactionStatus'" class="mb-5">
+      <div class="card shadow-sm border-0" style="background-color: #f9fbfc;">
+        <div class="card-header bg-secoundary text-black fw-bold" style="font-size: 1.25rem;">
+          Transaction Status Report
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-transparent" *ngFor="let row of transactionStatusReport" style="font-size: 1.1rem;">
+              <span class="text-secoundary">{{ row.status }}</span>: {{ row.count }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Section: Platform Performance Report -->
+    <section *ngIf="activeSection === 'platformPerformance'" class="mb-5">
+      <div class="card shadow-sm border-0" style="background-color: #f9fbfc;">
+        <div class="card-header bg-secoundary text-black fw-bold" style="font-size: 1.25rem;">
+          Platform Performance Report
+        </div>
+        <div class="card-body" style="font-size: 1.1rem;">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-transparent">Total Users: <span class="text-black">{{ platformPerformanceReport.totalUsers }}</span></li>
+            <li class="list-group-item bg-transparent">Total Properties: <span class="text-black">{{ platformPerformanceReport.totalProperties }}</span></li>
+            <li class="list-group-item bg-transparent">Total Sellers: <span class="text-black">{{ platformPerformanceReport.totalSellers }}</span></li>
+            <li class="list-group-item bg-transparent">Total Buyers: <span class="text-black">{{ platformPerformanceReport.totalBuyers }}</span></li>
+            <li class="list-group-item bg-transparent">Total Active Properties: <span class="text-black">{{ platformPerformanceReport.totalActiveProperties }}</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Section: Sales Performance Report -->
+    <section *ngIf="activeSection === 'salesPerformance'">
+      <div class="card shadow-sm border-0" style="background-color: #f9fbfc;">
+        <div class="card-header bg-secoundary text-black fw-bold" style="font-size: 1.25rem;">
+          Sales Performance Report
+        </div>
+        <div class="card-body" style="font-size: 1.1rem;">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-transparent">Total Sales Amount: <span class="text-black">{{ salesPerformanceReport.totalSalesAmount | currency:'INR':'symbol' }}</span></li>
+            <li class="list-group-item bg-transparent">Total Properties Sold: <span class="text-black">{{ salesPerformanceReport.totalPropertiesSold }}</span></li>
+            <li class="list-group-item bg-transparent">Total Sales by Manager: <span class="text-black">{{ salesPerformanceReport.totalSalesByManager }}</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  
+  </div>
+  

@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-muted">❤️ Your Favorite Properties</h2>
+
+  <div *ngIf="favorites.length === 0">
+    <p class="text-muted">You haven't added any favorites yet.</p>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div *ngFor="let fav of favorites" class="col">
+      <div class="card h-100 shadow-sm border border-secondary">
+        <div class="position-relative">
+          <!-- <img *ngIf="fav.property.imageUrl" [src]="fav.property.imageUrl"
+               class="card-img-top object-fit-cover"
+               alt="{{ fav.property.title }}"
+               style="height: 200px; width: 100%; object-fit: cover;" /> -->
+               <img
+               *ngIf="fav.property"
+               [src]="fav.property.imageUrl ? 'http://localhost:8082' + fav.property.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image'"
+               class="card-img-top"
+               style="height: 200px; width: 100%; object-fit: cover;"
+               alt="{{ fav.property.title || 'Property Image' }}"
+             />
+
+          <button class="btn btn-light position-absolute top-0 end-0 m-2 text-danger"
+                  (click)="removeFavorite(fav.id)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">{{ fav.property.title }}</h5>
+          <p class="card-text">{{ fav.property.description }}</p>
+          <p class="card-text">
+            <strong>₹{{ fav.property.price }}</strong> • {{ fav.property.location }}
+          </p>
+
+          <button class="btn btn-outline-secondary w-100 mb-2"
+                  (click)="openInquiryModal(fav.property.id)">
+            ❓ Ask about this property
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔍 Inquiry Modal -->
+  <div class="modal fade" id="inquiryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">📨 Ask a Question</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <app-inquiry-form [propertyId]="selectedPropertyId"></app-inquiry-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

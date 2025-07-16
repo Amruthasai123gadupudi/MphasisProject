@@ -1,0 +1,177 @@
+<div class="container shadow-sm p-4  mt-5 mb-4 rounded">
+  <h2 class="mb-4 text-dark text-center">Inquiry Section!</h2>
+
+  <!-- <div class="mb-3">
+    <label for="sellerIdInput" class="form-label text-dark fw-semibold">Seller ID:</label>
+    <input type="number" id="sellerIdInput" class="form-control w-25"
+           [(ngModel)]="sellerId" placeholder="Enter Seller ID" />
+  </div> -->
+  
+  <div class="mb-3 d-flex justify-content-center gap-3">
+    <button (click)="toggleLoadInquiries()" class="btn btn-primary me-2">
+      {{ showInquiries ? 'Hide' : 'Load' }} Inquiries
+    </button>
+
+    <button class="btn btn-info" (click)="toggleSellerResponses()">
+      {{ showSellerResponses ? 'Hide' : 'Show' }} Seller Responses
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <!-- Seller Responses -->
+  <div *ngIf="showSellerResponses" class="card p-3 mb-4 bg-light">
+    <h4>All Seller Responses</h4>
+
+    <div *ngIf="sellerResponses.length === 0">
+      <p>No responses found for this seller.</p>
+    </div>
+
+    <ul *ngIf="sellerResponses.length > 0" class="list-group">
+      <li *ngFor="let inq of sellerResponses" class="list-group-item">
+        <strong>Inquiry #{{ inq.id }}:</strong><br />
+        <pre>{{ inq.responseMessage }}</pre>
+        <div *ngIf="inq.scheduleDate">
+          <small>Scheduled on: {{ inq.scheduleDate | date:'medium' }}</small>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Inquiry List -->
+  <ul class="list-group mb-4" *ngIf="showInquiries && inquiries.length > 0">
+    <li *ngFor="let inq of inquiries"
+        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center w-50"
+        (click)="select(inq)">
+      <span>
+        <strong>Inquiry #{{ inq.id }}</strong> – {{ inq.message }}
+      </span>
+      <span class="badge bg-secondary">{{ inq.createdAt | date: 'short' }}</span>
+    </li>
+  </ul>
+
+  <!-- Response Form -->
+  <div *ngIf="showInquiries && selectedInquiry" class="card p-4 shadow-sm">
+    <h4 class="card-title mb-3">Respond to Inquiry #{{ selectedInquiry.id }}</h4>
+
+    <p class="mb-3">
+      <strong>From:</strong> {{ selectedInquiry.buyer.name }}
+    </p>
+
+    <div class="mb-3">
+      <label for="responseText" class="form-label">Your Response</label>
+      <textarea id="responseText" [(ngModel)]="responseText"
+                rows="5" class="form-control"
+                placeholder="Type your response..."></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="scheduleDate" class="form-label">Schedule Date (optional):</label>
+      <input type="datetime-local"
+             [(ngModel)]="scheduleDateInput"
+             id="scheduleDate" class="form-control" />
+    </div>
+
+    <button (click)="submitResponse()" class="btn btn-success">
+      <i class="bi bi-send-fill"></i> Send Response
+    </button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- <div class="container p-4 mb-4 rounded shadow-sm">
+  <h2 class="mb-4 text-dark">Inquiry Section!</h2>
+
+  
+  <div class="mb-3">
+    <label for="sellerIdInput" class="form-label  text-dark fw-semibold">Seller ID:</label>
+    <input type="number" id="sellerIdInput" class="form-control w-25" [(ngModel)]="sellerId" placeholder="Enter Seller ID" />
+  </div>
+
+  
+  <div class="mb-3">
+    <button (click)="loadSellerInquiries()" class="btn btn-primary">Load Inquiries</button>
+  </div>
+
+  <div class="mb-3">
+    <button class="btn btn-info" (click)="toggleSellerResponses()">
+      {{ showSellerResponses ? 'Hide' : 'Show' }} Seller Responses
+    </button>
+  </div>
+  <div *ngIf="showSellerResponses" class="card p-3 mb-4 bg-light">
+    <h4>All Seller Responses</h4>
+    
+    <div *ngIf="inquiries.length === 0">
+      <p>No inquiries loaded yet.</p>
+    </div>
+    
+    <ul *ngIf="inquiries.length > 0" class="list-group">
+      <li *ngFor="let inq of inquiries" class="list-group-item">
+        <strong>Inquiry #{{ inq.id }}:</strong><br />
+        <pre *ngIf="inq.responseMessage; else noResponse">{{ inq.responseMessage }}</pre>
+        <ng-template #noResponse><em>No response sent yet.</em></ng-template>
+        <div *ngIf="inq.scheduleDate">
+          <small>Scheduled on: {{ inq.scheduleDate | date:'medium' }}</small>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+<ul class="list-group mb-4">
+  <li 
+    *ngFor="let inq of inquiries" 
+    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center  w-50"
+    (click)="select(inq)">
+    <span>
+      <strong>Inquiry #{{ inq.id }}</strong> – {{ inq.message }}
+    </span>
+    <span class="badge bg-secondary">{{ inq.createdAt | date: 'short' }}</span>
+  </li>
+</ul>
+
+<div *ngIf="selectedInquiry" class="card p-4 shadow-sm">
+  <h4 class="card-title mb-3">Respond to Inquiry #{{ selectedInquiry.id }}</h4>
+  
+  <p class="mb-3">
+    <strong>From:</strong> {{ selectedInquiry.buyer.name }}
+  </p>
+
+  <div class="mb-3">
+    <label for="responseText" class="form-label">Your Response</label>
+    <textarea 
+      id="responseText"
+      [(ngModel)]="responseText" 
+      rows="5" 
+      class="form-control" 
+      placeholder="Type your response...">
+    </textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="scheduleDate" class="form-label">Schedule Date (optional):</label>
+    <input 
+      type="datetime-local" 
+      [(ngModel)]="scheduleDateInput" 
+      id="scheduleDate"
+      class="form-control" />
+  </div>
+
+  <button (click)="submitResponse()" class="btn btn-success">
+    <i class="bi bi-send-fill"></i> Send Response
+  </button>
+</div>
+</div> -->
+
+
+

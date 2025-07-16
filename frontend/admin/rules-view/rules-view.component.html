@@ -1,0 +1,59 @@
+
+<div class="container mt-4">
+    <h3>Platform Rules</h3>
+   
+    <!-- Add Rule Form -->
+    <form *ngIf="!readonly" [formGroup]="ruleForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">Code</label>
+        <input type="text" class="form-control" formControlName="code" />
+        <div *ngIf="f['code']?.invalid && (f['code']?.dirty || f['code']?.touched)" class="text-danger">
+          Code is required.
+        </div>
+      </div>
+   
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" formControlName="description"></textarea>
+        <div *ngIf="f['description']?.invalid && (f['description']?.dirty || f['description']?.touched)" class="text-danger">
+          Description is required.
+        </div>
+      </div>
+   
+      <div class="mb-3">
+        <label class="form-label">Target Role</label>
+        <select class="form-select" formControlName="targetRole">
+          <!-- <option value="ALL">--Select the  Role--</option> -->
+          <option value="BUYER">Buyer</option>
+          <option value="SELLER">Seller</option>
+          <option value="MANAGER">Manager</option>
+        </select>
+      </div>
+   
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" formControlName="active" id="active" />
+        <label for="active" class="form-check-label">Active</label>
+      </div>
+   
+      <button type="submit" class="btn btn-primary" [disabled]="ruleForm.invalid || submitted">
+        Add Rule
+      </button>
+    </form>
+   
+    <hr />
+   
+    <h4>Rules for your role ({{ userRole || 'Unknown' }})</h4>
+    <ul class="list-group">
+      <li *ngFor="let rule of rules" class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ rule.code }}</strong>: {{ rule.description }}
+          <span *ngIf="rule.targetRole !== 'ALL'" class="badge bg-info ms-2">{{ rule.targetRole }}</span>
+        </div>
+        <div>
+          <span class="badge bg-success me-2" *ngIf="rule.active">Active</span>
+          <span class="badge bg-secondary me-2" *ngIf="!rule.active">Inactive</span>
+          <button *ngIf="!readonly" class="btn btn-danger btn-sm" (click)="deleteRule(rule.id)">Delete</button>
+        </div>
+      </li>
+    </ul>
+  </div>

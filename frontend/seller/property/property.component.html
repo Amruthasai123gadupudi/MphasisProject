@@ -1,0 +1,263 @@
+<!-- Full Page Flex Container -->
+<div class="d-flex min-vh-100 bg-secondary flex-column flex-md-row">
+
+  <!-- Sidebar -->
+  <div class="sidebar bg-dark text-white p-3 position-fixed position-md-fixed h-100"
+       style="width: 250px; top: 0; left: 0; z-index: 1000;">
+    <div class="logo mb-4 fw-bold fs-4">🏠 RealEstate</div>
+
+    <ul class="nav flex-column">
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" style="cursor:pointer;" (click)="loadPropertiesBySeller(2)">🏘️ Load All Properties</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" style="cursor:pointer;" (click)="loadAvailableProperties()">✅ Available Properties</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" style="cursor:pointer;" (click)="toggleAddForm()">➕ Add Property</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" style="cursor:pointer;" (click)="viewMode = 'inquiries'; selectedProperty = undefined">📩 Show Inquiries</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" style="cursor:pointer;" (click)="viewMode = 'transactions'; selectedProperty = undefined">💳 Show Transactions</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Page Header -->
+  <header class="bg-light p-3"
+          style="margin-left: 250px; height: auto; width: calc(100% - 250px); display: flex; flex-direction: column; justify-content: center; position: fixed; top: 0; right: 0; z-index: 900;">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h4 class="mb-0">👋 Welcome, {{sellerName}}! <small class="text-muted">Explore your dashboard</small></h4>
+      <button class="btn btn-outline-danger" (click)="logout()">
+        Logout
+      </button>
+    </div>
+    <h5 class="mb-0 bg-secondary text-white p-2 mt-2 rounded">
+      🔍 Dashboard Overview
+      <small class="d-block d-md-inline ms-md-2">✨ Manage properties and interactions</small>
+    </h5>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content container-fluid p-4 bg-light"
+       style="margin-left: 250px; margin-top: 80px; min-height: calc(100vh - 80px);">
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+    <!-- Add New Property Form -->
+    <div *ngIf="viewMode === 'add'" class="card mt-3 p-3 w-100">
+      <button class="btn btn-light position-absolute top-0 start-0 m-2" (click)="toggleAddForm()">← Back</button>
+      <br><br><br>
+
+      <h3>Add New Property</h3>
+      <form #addForm="ngForm" (ngSubmit)="addProperty()" novalidate enctype="multipart/form-data">
+
+        <div class="mb-3">
+          <label for="newTitle">Title</label>
+          <input
+            id="newTitle"
+            [(ngModel)]="newProperty.title"
+            name="title"
+            class="form-control"
+            required
+            #title="ngModel"
+          />
+          <div *ngIf="title.invalid && title.touched" class="text-danger small">
+            <div *ngIf="title.errors?.['required']">Title is required.</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newDescription">Description</label>
+          <textarea
+            id="newDescription"
+            [(ngModel)]="newProperty.description"
+            name="description"
+            class="form-control"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="newPrice">Price</label>
+          <input
+            id="newPrice"
+            type="number"
+            [(ngModel)]="newProperty.price"
+            name="price"
+            class="form-control"
+            required
+            min="1"
+            #price="ngModel"
+          />
+          <div *ngIf="price.invalid && price.touched" class="text-danger small">
+            <div *ngIf="price.errors?.['required']">Price is required.</div>
+            <div *ngIf="price.errors?.['min']">Price must be a positive number.</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newLocation">Location</label>
+          <input
+            id="newLocation"
+            [(ngModel)]="newProperty.location"
+            name="location"
+            class="form-control"
+            required
+            #location="ngModel"
+          />
+          <div *ngIf="location.invalid && location.touched" class="text-danger small">
+            <div *ngIf="location.errors?.['required']">Location is required.</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newManagerId">Manager ID</label>
+          <input
+            id="newManagerId"
+            type="number"
+            [(ngModel)]="newProperty.manager.id"
+            name="managerId"
+            class="form-control"
+            required
+            min="1"
+            #managerId="ngModel"
+          />
+          <div *ngIf="managerId.invalid && managerId.touched" class="text-danger small">
+            <div *ngIf="managerId.errors?.['required']">Manager ID is required.</div>
+            <div *ngIf="managerId.errors?.['min']">Manager ID must be greater than 0.</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newTypeId">Type ID</label>
+          <input
+            id="newTypeId"
+            type="number"
+            [(ngModel)]="newProperty.type.id"
+            name="typeId"
+            class="form-control"
+            required
+            min="1"
+            #typeId="ngModel"
+          />
+          <div *ngIf="typeId.invalid && typeId.touched" class="text-danger small">
+            <div *ngIf="typeId.errors?.['required']">Type ID is required.</div>
+            <div *ngIf="typeId.errors?.['min']">Type ID must be greater than 0.</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newImageFile">Property Image</label>
+          <input
+            id="newImageFile"
+            type="file"
+            (change)="onFileSelected($event)"
+            class="form-control"
+            accept="image/*"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid || !selectedFile">
+          Add Property
+        </button>
+      </form>
+    </div>
+
+    <!-- Inquiry & Transaction Components -->
+    <app-inquiry *ngIf="viewMode === 'inquiries'"></app-inquiry>
+    <app-seller-transactions *ngIf="viewMode === 'transactions'"></app-seller-transactions>
+
+    <!-- Property List -->
+    <div *ngIf="viewMode === 'list'">
+      <div *ngIf="selectedProperty" class="card mt-4 mb-4 p-3 position-relative selected-property-form">
+        <button class="btn btn-light position-absolute top-0 start-0 m-2" (click)="selectedProperty = undefined">← Back</button>
+        <br><br>
+        <h3>Selected Property Details (ID: {{ selectedProperty.id }})</h3>
+        <!--update form-->
+        <form #updateForm="ngForm" (ngSubmit)="updateProperty()" enctype="multipart/form-data">
+
+          <div class="mb-3">
+            <label for="updateTitle">Title</label>
+            <input id="updateTitle" [(ngModel)]="selectedProperty.title" name="title" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="updateDescription">Description</label>
+            <textarea id="updateDescription" [(ngModel)]="selectedProperty.description" name="description" class="form-control"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="updatePrice">Price</label>
+            <input id="updatePrice" type="number" [(ngModel)]="selectedProperty.price" name="price" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="updateLocation">Location</label>
+            <input id="updateLocation" [(ngModel)]="selectedProperty.location" name="location" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="updateSellerId">Seller ID</label>
+            <input id="updateSellerId" type="number" [(ngModel)]="selectedProperty.seller.id" name="sellerId" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="updateManagerId">Manager ID</label>
+            <input id="updateManagerId" type="number" [(ngModel)]="selectedProperty.manager.id" name="managerId" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="updateTypeId">Type ID</label>
+            <input id="updateTypeId" type="number" [(ngModel)]="selectedProperty.type.id" name="typeId" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="updateImageFile">Update Property Image</label>
+            <input
+              id="updateImageFile"
+              type="file"
+              (change)="onFileSelected($event)"
+              class="form-control"
+              accept="image/*"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary me-2">Update Property</button>
+
+          <button type="button" class="btn btn-danger" (click)="deleteProperty(selectedProperty.id, selectedProperty.seller.id)">Delete Property</button>
+        </form>
+      </div>
+
+      <!-- Properties Grid -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-4 mb-4"
+           *ngIf="properties && properties.length > 0">
+        <div class="col" *ngFor="let prop of properties">
+          <div class="card card-lift h-100 d-flex flex-column">
+            <img
+              [src]="prop.imageUrl ? 'http://localhost:8082' + prop.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image'"
+              class="card-img-top"
+              style="height: 200px; object-fit: cover;"
+              alt="Property Image"
+            />
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ prop.title }}</h5>
+              <p class="card-text"><strong>Type:</strong> {{ prop.type.name || 'N/A' }}</p>
+              <p class="card-text"><strong>Price:</strong> {{ prop.price | currency:'INR':'symbol' }}</p>
+              <p class="card-text"><strong>Seller ID:</strong> {{ prop.seller.id }}</p>
+              <div class="mt-auto d-flex justify-content-between">
+                <button (click)="loadPropertyById(prop.id)" class="btn btn-primary btn-sm me-2">View</button>
+                <button (click)="deleteProperty(prop.id, prop.seller.id)" class="btn btn-danger btn-sm">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p *ngIf="properties && properties.length === 0" class="text-center mt-4">No properties to display.</p>
+    </div>
+  </div>
+</div>

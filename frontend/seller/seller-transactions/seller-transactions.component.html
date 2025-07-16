@@ -1,0 +1,47 @@
+<div class="container-fluid mb-4 mt-5 p-0 pb-2">
+  <!--heading-->
+  <div class="row">
+    <div class="col-12 d-flex justify-content-center">
+      <h2 class="text-center text-dark ">Transaction Section</h2>
+    </div>
+  </div>
+  <!--Main content-->
+  <div class="row g-4" *ngIf="transactions.length > 0">
+
+    <div
+      class="col-12"               
+      [class.col-md-6]="transactions.length > 1"  
+      [class.col-lg-4]="transactions.length > 2"  
+      *ngFor="let txn of transactions"
+    >
+      <div class="card shadow-sm h-100">
+        <div class="card-body light-grey-bg">
+          <h5 class="card-title">{{ txn.property.title }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{ txn.property.location }}</h6>
+          <p class="card-text">
+            <strong>Status:</strong> {{ txn.status }}<br />
+            <strong>Amount:</strong> ₹{{ txn.amount | number }}<br />
+            <strong>Buyer:</strong> {{ txn.buyer.name }}<br />
+            <strong>Closed At:</strong> {{ txn.closedAt ? (txn.closedAt | date:'medium') : 'N/A' }}
+          </p>
+
+          <div class="input-group mt-3">
+            <select class="form-select" [(ngModel)]="statusUpdates[txn.id]">
+              <option *ngFor="let status of statusOptions" [value]="status">
+                {{ status }}
+              </option>
+            </select>
+            <button class="btn btn-outline-primary" (click)="updateStatus(txn.id)">
+              Update Status
+            </button>
+          </div>
+        </div>
+      </div>
+      
+            
+    </div>
+
+  </div>
+</div>
+
+  

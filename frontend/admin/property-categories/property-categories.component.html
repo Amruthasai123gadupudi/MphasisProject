@@ -1,0 +1,54 @@
+
+<div class="container mt-4">
+    <h3 class="mb-4">Property Categories</h3>
+ 
+    <!-- Add Category Form -->
+    <div class="p-3 mb-4 border rounded shadow-sm">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-4">
+          <input [(ngModel)]="newCategory.name" class="form-control" placeholder="Category name" />
+        </div>
+        <!-- <div class="col-md-5">
+          <input [(ngModel)]="newCategory.description" class="form-control" placeholder="Description" />
+        </div> -->
+        <div class="col-md-3 d-grid">
+          <button class="btn btn-primary" (click)="addCategory()" [disabled]="!newCategory.name">Add</button>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- List of Existing Categories -->
+    <ul class="list-unstyled">
+      <li *ngFor="let cat of categories" class="mb-3">
+        <div class="p-3 border rounded shadow-sm d-flex justify-content-between align-items-center">
+ 
+          <!-- Viewing Mode -->
+          <div *ngIf="editingCategory?.id !== cat.id" class="flex-grow-1">
+            <strong>{{ cat.name }}</strong>: {{ cat.description }}
+          </div>
+ 
+          <div *ngIf="editingCategory?.id !== cat.id">
+            <button class="btn btn-sm btn-primary me-2" (click)="startEdit(cat)">
+              Edit
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteCategory(cat.id!)">
+              Delete
+            </button>
+          </div>
+ 
+          <!-- Editing Mode -->
+          <div *ngIf="editingCategory?.id === cat.id" class="flex-grow-1 d-flex gap-2" style="min-width: 0;">
+            <input [(ngModel)]="editingCategory!.name" class="form-control" placeholder="New name" />
+            <input [(ngModel)]="editingCategory!.description" class="form-control" placeholder="New description" />
+            <button class="btn btn-sm btn-success" (click)="updateCategory()" [disabled]="!editingCategory!.name">
+              Save
+            </button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">
+              Cancel
+            </button>
+          </div>
+ 
+        </div>
+      </li>
+    </ul>
+  </div>

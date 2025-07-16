@@ -1,0 +1,173 @@
+<div class="container mt-4">
+  <div *ngIf="properties.length === 0">
+    <p class="text-muted">No approved properties found.</p>
+  </div>
+
+  <form class="row mb-4 g-3" #searchForm="ngForm" (ngSubmit)="onSearch()" novalidate>
+    <!-- Location (No validation) -->
+    <div class="col-md-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Location"
+        name="location"
+        [(ngModel)]="search.location"
+      />
+    </div>
+  
+    <!-- Min Price -->
+    <div class="col-md-2">
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Min Price"
+        name="minPrice"
+        [(ngModel)]="search.minPrice"
+        min="0"
+        #minRef="ngModel"
+      />
+      <div *ngIf="minRef.invalid && minRef.touched" class="text-danger small">
+        Min price must be 0 or more.
+      </div>
+    </div>
+  
+    <!-- Max Price -->
+    <div class="col-md-2">
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Max Price"
+        name="maxPrice"
+        [(ngModel)]="search.maxPrice"
+        min="0"
+        #maxRef="ngModel"
+      />
+      <div *ngIf="maxRef.invalid && maxRef.touched" class="text-danger small">
+        Max price must be 0 or more.
+      </div>
+    </div>
+  
+    <!-- Type Select -->
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="search.typeId" name="typeId">
+        <option [ngValue]="undefined">All Types</option>
+        <option *ngFor="let type of propertyTypes" [ngValue]="type.id">{{ type.name }}</option>
+      </select>
+    </div>
+  
+    <!-- Search Button -->
+    <div class="col-md-1 d-grid">
+      <button type="submit" class="btn btn-outline-primary">🔍</button>
+    </div>
+  
+    <!-- Reset Button -->
+    <div class="col-md-2 d-grid">
+      <button type="button" class="btn btn-outline-secondary" (click)="onReset()">🔄 Reset</button>
+    </div>
+  </form>
+  
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div *ngFor="let property of properties" class="col">
+      <div class="card h-100 shadow-sm border border-secondary">
+
+        <div class="position-relative">
+          <!-- <img *ngIf="property.imageUrl" [src]="property.imageUrl" class="card-img-top object-fit-cover"
+            alt="{{ property.title }}" style="height: 200px; width: 100%; object-fit: cover;" /> -->
+            <img
+            *ngIf="property"
+            [src]="property.imageUrl ? 'http://localhost:8082' + property.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image'"
+            class="card-img-top"
+            style="height: 200px; width: 100%; object-fit: cover;"
+            alt="{{ property.title || 'Property Image' }}"
+          />
+          <button class="btn btn-light position-absolute top-0 end-0 m-2"
+            [ngClass]="{ 'text-danger': property.isFavorite, 'text-muted': !property.isFavorite }"
+            (click)="toggleFavorite(property)" title="Add to Favorites">
+            <i class="bi" [ngClass]="property.isFavorite ? 'bi-heart-fill' : 'bi-heart'"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">{{ property.title }}</h5>
+          <p class="card-text">{{ property.description }}</p>
+          <p class="card-text"><strong>₹{{ property.price }}</strong> • {{ property.location }}</p>
+
+          <!-- ⭐️ Side-by-side action buttons -->
+          <div class="d-flex justify-content-between gap-2 mb-3">
+            <button class="btn btn-outline-primary w-30" (click)="viewProperty(property); openPropertyModal(property)">
+              👁️ View
+            </button>
+
+            <button class="btn btn-outline-secondary w-70" (click)="openInquiryModal(property.id)">
+              ❓ Ask a Question
+            </button>
+          </div>
+
+          <app-inquiry-form *ngIf="property.showInquiryForm" [propertyId]="property.id"></app-inquiry-form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔍 Inquiry Modal -->
+  <div class="modal fade" id="inquiryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">📨 Ask a Question</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <app-inquiry-form [propertyId]="selectedPropertyId"></app-inquiry-form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 👁️ View Details Modal -->
+  <div class="modal fade" id="propertyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-light">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ selectedProperty?.title }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <div class="modal-body">
+          <div class="row">
+            <!-- Left: Image -->
+            <div class="col-md-6 mb-3 mb-md-0">
+              <!-- <img
+                [src]="selectedProperty?.imageUrl"
+                alt="{{ selectedProperty?.title }}"
+                class="img-fluid rounded w-100"
+                style="max-height: 350px; object-fit: cover;"
+              /> -->
+              <img
+              *ngIf="selectedProperty"
+              [src]="selectedProperty.imageUrl ? 'http://localhost:8082' + selectedProperty.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image'"
+              class="card-img-top"
+              style="height: 200px; width: 100%; object-fit: cover;"
+              alt="{{ selectedProperty.title || 'Property Image' }}"
+            />
+            </div>
+  
+            <!-- Right: Details -->
+            <div class="col-md-6">
+              <p><strong>Location:</strong> {{ selectedProperty?.location }}</p>
+              <p><strong>Price:</strong> ₹{{ selectedProperty?.price | number }}</p>
+              <p><strong>About:</strong> {{ selectedProperty?.description }}</p>
+            </div>
+          </div>
+  
+          <!-- Centered Buy Button -->
+          <div class="text-center mt-4">
+            <button class="btn btn-success px-4 py-2" (click)="buyProperty()">🛒 Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
